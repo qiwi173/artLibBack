@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  login String @unique
+  password String
+  email String @unique
+  role String
+  subscription Boolean @default(false)
+
+  @@map("users")
+}
+
+model Artist {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  artistName String @map("artist_name")
+  biography String
+  yearsOfLife String @map("years_of_life")
+
+  arts Art[]
+  awards Award[]
+  schools School[]
+  communities Community[]
+
+  @@map("artists")
+}
+
+model Award{
+  id String @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  awardName String @map("award_name")
+  awardDescription String @map("award_description")
+
+  artists Artist[]
+
+  @@map("awards")
+}
+
+model School{
+  id String @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  schoolName String @map("school_name")
+  schoolDescription String @map("school_description")
+
+  artists Artist[]
+
+  @@map("schools")
+}
+
+model Community {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  communityName String @map("community_name")
+  communityDescription String @map("community_description")
+
+  artists Artist[]
+
+  @@map("communities")
+}
+
+model Art {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  artName String @map("art_name")
+  artImage String @map("art_image")
+  artDescription String @map("art_description")
+  productionYear String @map("production_year")
+  materials String
+  measurements String
+  cost Int
+  salesHistory String @map("sales_history")
+
+  museum Museum @relation(fields: [museumId], references: [id])
+  museumId String
+  artist Artist @relation(fields: [artistId], references: [id])
+  artistId String
+  exhibitions Exhibition[]
+
+  @@map("arts")
+}
+
+model Exhibition{
+  id String @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  exhibitionName String @map("exhibition_name")
+  exhibitionDescription String @map("exhibition_description")
+
+  arts Art[]
+
+  @@map("exhibitions")
+}
+
+model Museum{
+  id String @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  museumName String @map("museum_name")
+  museumDescription String @map("museum_description")
+
+  arts Art[]
+
+  @@map("museums")
+}
