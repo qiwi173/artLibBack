@@ -13,13 +13,30 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  login String @unique
+  userName String ? @map("user_name")
   password String
   email String @unique
-  role String
+  role String @default("normal")
   subscription Boolean @default(false)
+  news News[] 
 
   @@map("users")
+}
+
+model News {
+   id String @id @default(cuid())
+   createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  title String
+  status String @default("not_approved")
+  releaseDate DateTime @map("release_date")
+  category String
+  content String
+  user User @relation(fields: [userId], references: [id])
+  userId String
+
+  @@map("news")
 }
 
 model Artist {
@@ -85,14 +102,14 @@ model Art {
 
   artName String @map("art_name")
   artImage String @map("art_image")
-  artDescription String @map("art_description")
+  artDescription String  @map("art_description")
   productionYear String @map("production_year")
   materials String
   measurements String
-  cost Int
-  salesHistory String @map("sales_history")
+  cost Int ?
+  salesHistory String ? @map("sales_history")
 
-  museum Museum @relation(fields: [museumId], references: [id])
+  museum Museum ? @relation(fields: [museumId], references: [id])
   museumId String
   artist Artist @relation(fields: [artistId], references: [id])
   artistId String
