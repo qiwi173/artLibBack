@@ -1,13 +1,16 @@
+import { Transform } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
   IsDate,
   IsEmail,
+  IsEnum,
   IsObject,
   IsOptional,
   IsString,
   MinLength,
 } from 'class-validator';
+import { UserRole } from 'generated/prisma';
 
 export class UserDto {
   @IsEmail()
@@ -25,9 +28,10 @@ export class UserDto {
   })
   password?: string;
 
-  @IsString()
+  @IsEnum(UserRole)
   @IsOptional()
-  role?: string;
+  @Transform(({value})=> ''+value.toLoverCase())
+  user_role?: UserRole
 
   @IsOptional()
   @IsBoolean()

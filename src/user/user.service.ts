@@ -12,7 +12,7 @@ export class UserService {
   async getById(id: string): Promise<User> {
     return this.prisma.user.findUnique({
       where: { id },
-      include: { news: true },
+      include: { news: true, favorites:true },
     });
   }
 
