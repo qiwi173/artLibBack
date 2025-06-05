@@ -12,7 +12,8 @@ export class NewsDto {
   status?: NewsStatus;
 
   @IsDate()
-  releaseDate: Date;
+  @IsOptional()
+  releaseDate?: Date;
 
   @IsString()
   category: string;

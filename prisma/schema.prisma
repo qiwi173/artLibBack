@@ -45,7 +45,7 @@ model News {
 
   title String
   status NewsStatus @default(not_approved)
-  releaseDate DateTime @map("release_date")
+  releaseDate DateTime? @map("release_date")
   category String
   content String
   user User @relation(fields: [userId], references: [id])
