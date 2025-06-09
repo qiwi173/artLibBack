@@ -31,7 +31,7 @@ export class ArtController {
   }
 
   @HttpCode(200)
-  @Post('create')
+  @Post()
   @Auth()
   async createArt(
     @CurrentUser('role') role: string,
@@ -41,7 +41,7 @@ export class ArtController {
   ) {
     if (role !== 'admin')
       throw new UnauthorizedException(
-        'Это дуйствие доступно только администратору',
+        'Это дeйствие доступно только администратору',
       );
 
     return this.artService.create(artistId, genreId, dto);
@@ -57,7 +57,7 @@ export class ArtController {
   ) {
     if (role !== 'admin')
       throw new UnauthorizedException(
-        'Это дуйствие доступно только администратору',
+        'Это дeйствие доступно только администратору',
       );
 
     return this.artService.update(id, dto);
@@ -69,7 +69,7 @@ export class ArtController {
   async delete(@Param('id') id: string, @CurrentUser('role') role: string) {
     if (role !== 'admin')
       throw new UnauthorizedException(
-        'Это дуйствие доступно только администратору',
+        'Это дeйствие доступно только администратору',
       );
 
     return this.artService.delete(id);

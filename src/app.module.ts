@@ -5,8 +5,17 @@ import { ConfigModule } from '@nestjs/config';
 import { NewsModule } from './news/news.module';
 import { ArtistModule } from './artist/artist.module';
 import { ArtModule } from './art/art.module';
+import { GenreModule } from './genre/genre.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), AuthModule, UserModule, NewsModule, ArtistModule, ArtModule],
+  imports: [
+    ConfigModule.forRoot(),
+    AuthModule,
+    UserModule,
+    NewsModule,
+    ArtistModule,
+    ArtModule,
+    GenreModule,
+  ],
 })
 export class AppModule {}
