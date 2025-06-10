@@ -6,6 +6,7 @@ import { NewsModule } from './news/news.module';
 import { ArtistModule } from './artist/artist.module';
 import { ArtModule } from './art/art.module';
 import { GenreModule } from './genre/genre.module';
+import { MuseumModule } from './museum/museum.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { GenreModule } from './genre/genre.module';
     ArtistModule,
     ArtModule,
     GenreModule,
+    MuseumModule,
   ],
 })
 export class AppModule {}
