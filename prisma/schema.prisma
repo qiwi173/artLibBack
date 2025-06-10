@@ -13,28 +13,43 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  userName String ? @map("user_name")
+  userName String? @map("user_name")
   password String
   email String @unique
-  role String @default("normal")
+  role UserRole @default(normal) @map("user_role")
   subscription Boolean @default(false)
   news News[] 
+  favorites Favorites[]
 
   @@map("users")
 }
 
+model Favorites {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  artist Artist[]
+  genre Genre[]
+
+  user User @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  @@map("favorites")
+}
+
 model News {
-   id String @id @default(cuid())
-   createdAt DateTime @default(now()) @map("created_at")
+  id String @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   title String
-  status String @default("not_approved")
-  releaseDate DateTime @map("release_date")
+  status NewsStatus @default(not_approved)
+  releaseDate DateTime? @map("release_date")
   category String
   content String
   user User @relation(fields: [userId], references: [id])
-  userId String
+  userId String @map("user_id")
 
   @@map("news")
 }
@@ -52,6 +67,7 @@ model Artist {
   awards Award[]
   schools School[]
   communities Community[]
+  favorites Favorites[]
 
   @@map("artists")
 }
@@ -91,6 +107,7 @@ model Community {
   communityDescription String @map("community_description")
 
   artists Artist[]
+  exhibitions Exhibition[]
 
   @@map("communities")
 }
@@ -104,20 +121,35 @@ model Art {
   artImage String @map("art_image")
   artDescription String  @map("art_description")
   productionYear String @map("production_year")
-  materials String
+  materials Materials?
   measurements String
-  cost Int ?
-  salesHistory String ? @map("sales_history")
+  cost Int?
+  salesHistory String? @map("sales_history")
 
-  museum Museum ? @relation(fields: [museumId], references: [id])
-  museumId String
+  genre Genre @relation(fields: [genreId], references: [id])
+  genreId String @map("genre_id")
+  museum Museum? @relation(fields: [museumId], references: [id])
+  museumId String @map("museum_id")
   artist Artist @relation(fields: [artistId], references: [id])
-  artistId String
+  artistId String @map("artist_id")
   exhibitions Exhibition[]
 
   @@map("arts")
 }
 
+model Genre {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  genreName String @map("genre_name")
+  genreDescription String? @map("genre_description")
+
+  arts Art[]
+  favorites Favorites[]
+
+  @@map("genres")
+}
 model Exhibition{
   id String @id @default(cuid())
   createdAt DateTime @default(now()) @map("created_at")
@@ -125,6 +157,7 @@ model Exhibition{
 
   exhibitionName String @map("exhibition_name")
   exhibitionDescription String @map("exhibition_description")
+  community Community[]
 
   arts Art[]
 
@@ -142,4 +175,21 @@ model Museum{
   arts Art[]
 
   @@map("museums")
+}
+
+enum UserRole {
+   normal
+   premium
+   admin
+}
+
+enum Materials {
+   painting @map("Живопись")
+   graphic @map("Графика")
+   hybrid @map("Смешанное")
+}
+
+enum NewsStatus{
+   not_approved
+   approved
 }

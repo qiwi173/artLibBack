@@ -12,7 +12,7 @@ export class UserService {
   async getById(id: string): Promise<User> {
     return this.prisma.user.findUnique({
       where: { id },
-      include: { news: true },
+      include: { news: true, favorites:true },
     });
   }
 
@@ -37,7 +37,7 @@ export class UserService {
     return this.prisma.user.create({ data: user });
   }
 
-  async update(id: string, dto: UserDto){
+  async update(id: string, dto: Partial<UserDto>){
     let data = dto;
 
     if (data.password) {
