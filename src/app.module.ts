@@ -7,6 +7,10 @@ import { ArtistModule } from './artist/artist.module';
 import { ArtModule } from './art/art.module';
 import { GenreModule } from './genre/genre.module';
 import { MuseumModule } from './museum/museum.module';
+import { AwardModule } from './award/award.module';
+import { SchoolModule } from './school/school.module';
+import { CommunityModule } from './community/community.module';
+import { ExhibitionModule } from './exhibition/exhibition.module';
 
 @Module({
   imports: [
@@ -18,6 +22,10 @@ import { MuseumModule } from './museum/museum.module';
     ArtModule,
     GenreModule,
     MuseumModule,
+    AwardModule,
+    SchoolModule,
+    CommunityModule,
+    ExhibitionModule,
   ],
 })
 export class AppModule {}
