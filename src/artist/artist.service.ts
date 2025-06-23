@@ -14,7 +14,12 @@ export class ArtistService {
   async getById(id: string): Promise<Artist> {
     return this.prisma.artist.findUnique({
       where: { id },
-      include: { arts: true },
+      include: {
+        arts: true,
+        communities: true,
+        awards: true,
+        schools: true,
+      },
     });
   }
 
