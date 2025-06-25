@@ -11,6 +11,7 @@ import { AwardModule } from './award/award.module';
 import { SchoolModule } from './school/school.module';
 import { CommunityModule } from './community/community.module';
 import { ExhibitionModule } from './exhibition/exhibition.module';
+import { FavoritesModule } from './favorites/favorites.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ExhibitionModule } from './exhibition/exhibition.module';
     SchoolModule,
     CommunityModule,
     ExhibitionModule,
+    FavoritesModule,
   ],
 })
 export class AppModule {}

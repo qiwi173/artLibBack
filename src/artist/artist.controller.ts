@@ -60,7 +60,7 @@ export class ArtistController {
     return this.artistService.update(dto, id);
   }
 
-  @HttpCode(200)
+  @HttpCode(204)
   @Delete(':id')
   @Auth()
   async delete(@Param('id') id: string, @CurrentUser('role') role: string) {
@@ -71,4 +71,14 @@ export class ArtistController {
 
     return this.artistService.delete(id);
   }
+
+//  @HttpCode(200)
+//  @Put('toFavorites/:id')
+//  @Auth()
+//  async addToFavorites(
+//    @CurrentUser('id') userId: string,
+//    @Param('id') id: string,
+//  ) {
+//    return this.artistService.addToFavorites(userId, id);
+//  }
 }
