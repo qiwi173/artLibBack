@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Artist } from 'generated/prisma';
 import { PrismaService } from 'src/prisma.service';
 import { ArtistDto } from './dto/artist.dto';
+import { where } from 'sequelize';
 
 @Injectable()
 export class ArtistService {
@@ -41,10 +42,34 @@ export class ArtistService {
   }
 
   async delete(artistId: string) {
-    return this.prisma.news.delete({
+    return this.prisma.artist.delete({
       where: {
         id: artistId,
       },
     });
   }
+
+  async addToFavorites(userId: string, artistId: string) {
+    const { createdAt, updatedAt, ...user } = await this.prisma.user.findUnique(
+      {
+        where: { id: userId },
+        include: { favoriteArtists: true },
+      },
+    );
+
+    const { favoriteArtists } = user;
+
+    const artist = await this.prisma.artist.findUnique({
+      where: { id: artistId },
+    });
+
+    favoriteArtists.push(artist);
+
+    return this.prisma.user.update({
+      where: { id: userId },
+      data: favoriteArtists,
+    });
+   }
+
+   async removeFromFavorites(){}
 }

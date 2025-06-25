@@ -71,4 +71,14 @@ export class ArtistController {
 
     return this.artistService.delete(id);
   }
+
+  @HttpCode(200)
+  @Put('toFavorites/:id')
+  @Auth()
+  async addToFavorites(
+    @CurrentUser('id') userId: string,
+    @Param('id') id: string,
+  ) {
+    return this.artistService.addToFavorites(userId, id);
+  }
 }

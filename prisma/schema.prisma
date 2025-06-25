@@ -19,24 +19,34 @@ model User {
   role UserRole @default(normal) @map("user_role")
   subscription Boolean @default(false)
   news News[] 
-  favorites Favorites[]
+  favoriteArtists Artist[]
+  favoriteGenres Genre[]
 
   @@map("users")
 }
 
-model Favorites {
-  id String @id @default(cuid())
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+//model FavoriteArtists {
+//  id String @id @default(cuid())
+//  createdAt DateTime @default(now()) @map("created_at")
+//  updatedAt DateTime @updatedAt @map("updated_at")
 
-  artist Artist[]
-  genre Genre[]
+//  artists Artist[]
 
-  user User @relation(fields: [userId], references: [id])
-  userId String @map("user_id")
+//  user User[]
 
-  @@map("favorites")
-}
+//  @@map("favorite_artists")
+//}
+
+//model FavoriteGenres {
+//  id String @id @default(cuid())
+//  createdAt DateTime @default(now()) @map("created_at")
+//  updatedAt DateTime @updatedAt @map("updated_at")
+
+//  genres Genre[]
+//  user User[]
+
+//  @@map("favorite_genres")
+//}
 
 model News {
   id String @id @default(cuid())
@@ -67,7 +77,7 @@ model Artist {
   awards Award[]
   schools School[]
   communities Community[]
-  favorites Favorites[]
+  favoriteOfUser User[]
 
   @@map("artists")
 }
@@ -146,7 +156,7 @@ model Genre {
   genreDescription String? @map("genre_description")
 
   arts Art[]
-  favorites Favorites[]
+  favoriteOfUser User[]
 
   @@map("genres")
 }
