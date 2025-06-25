@@ -49,27 +49,28 @@ export class ArtistService {
     });
   }
 
-  async addToFavorites(userId: string, artistId: string) {
-    const { createdAt, updatedAt, ...user } = await this.prisma.user.findUnique(
-      {
-        where: { id: userId },
-        include: { favoriteArtists: true },
-      },
-    );
+//  async addToFavorites(userId: string, artistId: string) {
+//    const { createdAt, updatedAt, ...user } = await this.prisma.user.findUnique(
+//      {
+//        where: { id: userId },
+//        include: { favoriteArtists: true },
+//      },
+//    );
 
-    const { favoriteArtists } = user;
+//    const { favoriteArtists } = user;
 
-    const artist = await this.prisma.artist.findUnique({
-      where: { id: artistId },
-    });
+//    const artist = await this.prisma.artist.findUnique({
+//      where: { id: artistId },
+//    });
 
-    favoriteArtists.push(artist);
+//    favoriteArtists.push(artist);
 
-    return this.prisma.user.update({
-      where: { id: userId },
-      data: favoriteArtists,
-    });
-   }
+//    return this.prisma.user.update({
+//      where: { id: userId },
+//      data: favoriteArtists,
+//      include: { favoriteArtists: true },
+//    });
+//  }
 
-   async removeFromFavorites(){}
+//  async removeFromFavorites() {}
 }
