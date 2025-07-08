@@ -30,4 +30,13 @@ export class ArtDto {
   @IsString()
   @IsOptional()
   salesHistory?: string;
+
+  @IsString()
+  museumId?: string;
+
+  @IsString()
+  artistId: string;
+
+  @IsString()
+  genreId: string;
 }

@@ -33,18 +33,13 @@ export class ArtController {
   @HttpCode(200)
   @Post()
   @Auth()
-  async createArt(
-    @CurrentUser('role') role: string,
-    @Body('dto') dto: ArtDto,
-    @Body('artistId') artistId: string,
-    @Body('genreId') genreId: string,
-  ) {
+  async createArt(@CurrentUser('role') role: string, @Body() dto: ArtDto) {
     if (role !== 'admin')
       throw new UnauthorizedException(
         'Это дeйствие доступно только администратору',
       );
 
-    return this.artService.create(artistId, genreId, dto);
+    return this.artService.create(dto);
   }
 
   @HttpCode(200)
