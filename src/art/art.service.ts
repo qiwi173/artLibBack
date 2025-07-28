@@ -14,12 +14,24 @@ export class ArtService {
     return this.prisma.art.findUnique({ where: { id } });
   }
 
-  async create(artistId: string, genreId: string, dto: ArtDto) {
+  async create(dto: ArtDto) {
     return this.prisma.art.create({
       data: {
-        ...dto,
-        artist: { connect: { id: artistId } },
-        genre: { connect: { id: genreId } },
+        artName: dto.artName,
+        artImage: dto.artImage,
+        artDescription: dto.artDescription,
+        productionYear: dto.productionYear,
+        measurements: dto.measurements,
+        artist: {
+          connect: {
+            id: dto.artistId,
+          },
+        },
+        genre: {
+          connect: {
+            id: dto.genreId,
+          },
+        },
       },
     });
   }

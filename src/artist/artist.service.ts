@@ -2,14 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { Artist } from 'generated/prisma';
 import { PrismaService } from 'src/prisma.service';
 import { ArtistDto } from './dto/artist.dto';
-import { where } from 'sequelize';
 
 @Injectable()
 export class ArtistService {
   constructor(private prisma: PrismaService) {}
 
   async getAllArtists() {
-    this.prisma.artist.findMany({ include: { arts: true } });
+    return this.prisma.artist.findMany({ include: { arts: true } });
   }
 
   async getById(id: string): Promise<Artist> {

@@ -134,7 +134,7 @@ model Art {
   genre Genre @relation(fields: [genreId], references: [id])
   genreId String @map("genre_id")
   museum Museum? @relation(fields: [museumId], references: [id])
-  museumId String @map("museum_id")
+  museumId String? @map("museum_id")
   artist Artist @relation(fields: [artistId], references: [id])
   artistId String @map("artist_id")
   exhibitions Exhibition[]
