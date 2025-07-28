@@ -12,6 +12,7 @@ import { SchoolModule } from './school/school.module';
 import { CommunityModule } from './community/community.module';
 import { ExhibitionModule } from './exhibition/exhibition.module';
 import { FavoritesModule } from './favorites/favorites.module';
+import { UploadModule } from './file/upload.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { FavoritesModule } from './favorites/favorites.module';
     CommunityModule,
     ExhibitionModule,
     FavoritesModule,
+    UploadModule,
   ],
 })
 export class AppModule {}

@@ -12,6 +12,7 @@ export class NewsService {
   }
 
   async getAllNewsCreatedByCurrentUser(userId: string) {
+   console.log(userId, "service")
     return this.prisma.news.findMany({
       where: {
         userId,
