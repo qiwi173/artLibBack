@@ -34,6 +34,12 @@ export class NewsController {
   }
 
   @HttpCode(200)
+  @Get('by-id/:id')
+  async getById(@Param('id') id: string) {
+    return this.newsService.getOneById(id);
+  }
+
+  @HttpCode(200)
   @Post('create')
   @Auth()
   async createNews(

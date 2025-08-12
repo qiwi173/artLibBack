@@ -8,11 +8,12 @@ export class NewsDto {
 
   @IsEnum(NewsStatus)
   @IsOptional()
-  @Transform(({ value }) => '' + value.toLoverCase())
+  @Transform(({ value }) => '' + value.toLowerCase())
   status?: NewsStatus;
 
   @IsDate()
   @IsOptional()
+   @Transform(({ value }) => new Date(value))
   releaseDate?: Date;
 
   @IsString()

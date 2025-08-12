@@ -17,7 +17,7 @@ export class ArtDto {
 
   @IsEnum(Materials)
   @IsOptional()
-  @Transform(({ value }) => '' + value.toLoverCase())
+  @Transform(({ value }) => '' + value.toLowerCase())
   materials?: Materials;
 
   @IsString()
