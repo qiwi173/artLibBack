@@ -7,12 +7,20 @@ import { News } from 'generated/prisma';
 export class NewsService {
   constructor(private prisma: PrismaService) {}
 
+  async getOneById(id: string) {
+    return this.prisma.news.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
+
   async getAllNews() {
     return this.prisma.news.findMany();
   }
 
   async getAllNewsCreatedByCurrentUser(userId: string) {
-   console.log(userId, "service")
+    console.log(userId, 'service');
     return this.prisma.news.findMany({
       where: {
         userId,

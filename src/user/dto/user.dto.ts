@@ -30,7 +30,7 @@ export class UserDto {
 
   @IsEnum(UserRole)
   @IsOptional()
-  @Transform(({value})=> ''+value.toLoverCase())
+  @Transform(({value})=> ''+value.toLowerCase())
   user_role?: UserRole
 
   @IsOptional()
