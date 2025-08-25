@@ -15,6 +15,7 @@ import { Response } from 'express';
 export class AuthService {
   EXPIRE_DAY_REFRESH_TOKEN = 1;
   REFRESH_TOKEN_NAME = 'refreshToken';
+  ACCESS_TOKEN_NAME = 'accessToken';
 
   constructor(
     private configService: ConfigService,
@@ -24,7 +25,7 @@ export class AuthService {
 
   async login(dto: AuthDto) {
     const { password, ...user } = await this.validateUser(dto);
-    const tokens = this.issueTokens(user.id);
+    const tokens = this.issueTokens(user.id, user.role);
 
     return {
       user,
@@ -38,7 +39,7 @@ export class AuthService {
       throw new BadRequestException('Такой пользователь уже зарегестрирован');
 
     const { password, ...user } = await this.userService.create(dto);
-    const tokens = this.issueTokens(user.id);
+    const tokens = this.issueTokens(user.id, user.role);
 
     return {
       user,
@@ -56,8 +57,8 @@ export class AuthService {
     return { user, ...tokens };
   }
 
-  private issueTokens(userId: string) {
-    const data = { id: userId };
+  private issueTokens(userId: string, role?: string) {
+    const data = { id: userId, role };
 
     const accessToken = this.jwt.sign(data, {
       expiresIn: '1h',
@@ -67,6 +68,19 @@ export class AuthService {
     });
 
     return { accessToken, refreshToken };
+  }
+
+  addAccessTokenToResponse(res: Response, accessToken: string) {
+    const expiresIn = new Date();
+    expiresIn.setHours(expiresIn.getHours() + 1);
+
+    res.cookie(this.ACCESS_TOKEN_NAME, accessToken, {
+      httpOnly: true,
+      domain: this.configService.get('DOMAIN'),
+      expires: expiresIn,
+      secure: true,
+      sameSite: 'lax',
+    });
   }
 
   private async validateUser(dto: AuthDto) {

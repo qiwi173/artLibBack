@@ -7,7 +7,7 @@ import {
   Param,
   Post,
   Put,
-  UnauthorizedException,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -15,6 +15,9 @@ import { NewsService } from './news.service';
 import { Auth } from 'src/auth/decorators/auth.decorator';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
 import { NewsDto } from './dto/news.dto';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 
 @Controller('news')
 export class NewsController {
@@ -70,13 +73,9 @@ export class NewsController {
 
   @HttpCode(200)
   @Delete(':id')
-  @Auth()
-  async delete(@Param('id') id: string, @CurrentUser('role') role: string) {
-    if (role !== 'admin')
-      throw new UnauthorizedException(
-        'Удалить эту новость может только администратор',
-      );
-
+  @Roles('admin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  async delete(@Param('id') id: string) {
     return this.newsService.delete(id);
   }
 }

@@ -7,12 +7,13 @@ import {
   Param,
   Post,
   Put,
-  UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 import { SchoolService } from './school.service';
-import { Auth } from 'src/auth/decorators/auth.decorator';
-import { CurrentUser } from 'src/auth/decorators/user.decorator';
 import { SchoolDto } from './dto/school.dto';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 
 @Controller('school')
 export class SchoolController {
@@ -31,42 +32,26 @@ export class SchoolController {
   }
 
   @HttpCode(200)
+  @Roles('admin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post()
-  @Auth()
-  async create(@CurrentUser('role') role: string, @Body() dto: SchoolDto) {
-    if (role !== 'admin')
-      throw new UnauthorizedException(
-        'Это дeйствие доступно только администратору',
-      );
-
+  async create(@Body() dto: SchoolDto) {
     return this.schoolService.create(dto);
   }
 
   @HttpCode(200)
   @Put(':id')
-  @Auth()
-  async update(
-    @Param('id') id: string,
-    @Body() dto: SchoolDto,
-    @CurrentUser('role') role: string,
-  ) {
-    if (role !== 'admin')
-      throw new UnauthorizedException(
-        'Это дeйствие доступно только администратору',
-      );
-
+  @Roles('admin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  async update(@Param('id') id: string, @Body() dto: SchoolDto) {
     return this.schoolService.update(id, dto);
   }
 
   @HttpCode(200)
   @Delete(':id')
-  @Auth()
-  async delete(@Param('id') id: string, @CurrentUser('role') role: string) {
-    if (role !== 'admin')
-      throw new UnauthorizedException(
-        'Это дeйствие доступно только администратору',
-      );
-
+  @Roles('admin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  async delete(@Param('id') id: string) {
     return this.schoolService.delete(id);
   }
 }
