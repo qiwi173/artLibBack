@@ -16,7 +16,11 @@ import { UploadModule } from './file/upload.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: getEnvFilePath(),
+      ignoreEnvFile:false,
+    }),
     AuthModule,
     UserModule,
     NewsModule,
@@ -33,3 +37,15 @@ import { UploadModule } from './file/upload.module';
   ],
 })
 export class AppModule {}
+
+function getEnvFilePath(): string {
+  const env = process.env.NODE_ENV || 'staging';
+  
+  switch (env) {
+    case 'production':
+      return '.env';
+    case 'staging':
+    default:
+      return '.env.staging';
+  }
+}

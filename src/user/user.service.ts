@@ -22,7 +22,9 @@ export class UserService {
       include: { news: true },
     });
   }
-
+  async getAllUsers(): Promise<User[]> {
+    return this.prisma.user.findMany();
+  }
   async getProfile(id: string) {
     const profile = await this.getById(id);
     const { password, ...rest } = profile;
@@ -52,6 +54,14 @@ export class UserService {
       select: {
         userName: true,
         email: true,
+      },
+    });
+  }
+
+  async delete(id: string): Promise<UserDto> {
+    return this.prisma.user.delete({
+      where: {
+        id,
       },
     });
   }

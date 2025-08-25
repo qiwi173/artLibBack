@@ -7,12 +7,13 @@ import {
   Param,
   Post,
   Put,
-  UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 import { ExhibitionService } from './exhibition.service';
-import { Auth } from 'src/auth/decorators/auth.decorator';
-import { CurrentUser } from 'src/auth/decorators/user.decorator';
 import { ExhibitionDto } from './dto/exhibition.dto';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 
 @Controller('exhibition')
 export class ExhibitionController {
@@ -32,41 +33,25 @@ export class ExhibitionController {
 
   @HttpCode(200)
   @Post()
-  @Auth()
-  async create(@CurrentUser('role') role: string, @Body() dto: ExhibitionDto) {
-    if (role !== 'admin')
-      throw new UnauthorizedException(
-        'Это дeйствие доступно только администратору',
-      );
-
+  @Roles('admin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  async create(@Body() dto: ExhibitionDto) {
     return this.exhibitionService.create(dto);
   }
 
   @HttpCode(200)
   @Put(':id')
-  @Auth()
-  async update(
-    @Param('id') id: string,
-    @Body() dto: ExhibitionDto,
-    @CurrentUser('role') role: string,
-  ) {
-    if (role !== 'admin')
-      throw new UnauthorizedException(
-        'Это дeйствие доступно только администратору',
-      );
-
+  @Roles('admin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  async update(@Param('id') id: string, @Body() dto: ExhibitionDto) {
     return this.exhibitionService.update(id, dto);
   }
 
   @HttpCode(200)
   @Delete(':id')
-  @Auth()
-  async delete(@Param('id') id: string, @CurrentUser('role') role: string) {
-    if (role !== 'admin')
-      throw new UnauthorizedException(
-        'Это дeйствие доступно только администратору',
-      );
-
+  @Roles('admin')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  async delete(@Param('id') id: string) {
     return this.exhibitionService.delete(id);
   }
 }
