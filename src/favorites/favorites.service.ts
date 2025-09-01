@@ -5,6 +5,24 @@ import { PrismaService } from 'src/prisma.service';
 export class FavoritesService {
   constructor(private readonly prisma: PrismaService) {}
 
+  async getAllUsersFavorites(userId: string) {
+    const artists = await this.prisma.favoriteArtist.findMany({
+      where: {
+        userId,
+      },
+      include: { artist: true },
+    });
+    const genres = await this.prisma.favoriteGenre.findMany({
+      where: {
+        userId,
+      },
+      include: { genre: true },
+    });
+    return {
+      artists,
+      genres,
+    };
+  }
   async addFavoriteArtist(userId: string, artistId: string) {
     const existing = await this.prisma.favoriteArtist.findUnique({
       where: {

@@ -74,11 +74,14 @@ export class AuthService {
     const expiresIn = new Date();
     expiresIn.setHours(expiresIn.getHours() + 1);
 
+    const isProduction = this.configService.get('NODE_ENV') === 'production';
+    const domain = this.configService.get('DOMAIN');
+
     res.cookie(this.ACCESS_TOKEN_NAME, accessToken, {
       httpOnly: true,
-      domain: this.configService.get('DOMAIN'),
+      domain: isProduction ? domain : undefined,
       expires: expiresIn,
-      secure: true,
+      secure: isProduction,
       sameSite: 'lax',
     });
   }
@@ -98,22 +101,27 @@ export class AuthService {
   addRefreshTokenToResponse(res: Response, refreshToken: string) {
     const expiresIn = new Date();
     expiresIn.setDate(expiresIn.getDate() + this.EXPIRE_DAY_REFRESH_TOKEN);
+    const isProduction = this.configService.get('NODE_ENV') === 'production';
+    const domain = this.configService.get('DOMAIN');
 
     res.cookie(this.REFRESH_TOKEN_NAME, refreshToken, {
       httpOnly: true,
-      domain: this.configService.get('DOMAIN'),
+      domain: isProduction ? domain : undefined,
       expires: expiresIn,
-      secure: true,
+      secure: isProduction,
       sameSite: 'lax',
     });
   }
 
   removeRefreshTokenFromResponse(res: Response) {
+    const isProduction = this.configService.get('NODE_ENV') === 'production';
+    const domain = this.configService.get('DOMAIN');
+
     res.cookie(this.configService.get('REFRESH_TOKEN_NAME'), '', {
       httpOnly: true,
-      domain: this.configService.get('DOMAIN'),
+      domain: isProduction ? domain : undefined,
       expires: new Date(0),
-      secure: true,
+      secure: isProduction,
       sameSite: 'lax',
     });
   }

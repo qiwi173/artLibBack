@@ -1,11 +1,19 @@
-import { Body, Controller, Delete, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Post } from '@nestjs/common';
 import { FavoritesService } from './favorites.service';
 import { FavoriteArtistDto } from './dto/favoriteArtists.dto';
 import { FavoriteGenreDto } from './dto/favotiteGenres.dto';
+import { Auth } from 'src/auth/decorators/auth.decorator';
+import { CurrentUser } from 'src/auth/decorators/user.decorator';
 
 @Controller('favorites')
 export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
+
+  @Get()
+  @Auth()
+  async getFavorites(@CurrentUser('id') userId: string) {
+    return this.favoritesService.getAllUsersFavorites(userId);
+  }
 
   @Post('artist')
   async addFavoriteArtist(@Body() dto: FavoriteArtistDto) {
